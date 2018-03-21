@@ -25,8 +25,8 @@ public class PlayerControl : NetworkBehaviour {
             bulletSpawn.rotation);
 
         // Add velocity to the bullet
-        bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(200, 0));
-
+        bullet.GetComponent<Rigidbody2D>().velocity = new Vector2(6, 0);
+        NetworkServer.Spawn(bullet);
         // Destroy the bullet after 2 seconds
         Destroy(bullet, 2.0f);
     }
@@ -44,7 +44,7 @@ public class PlayerControl : NetworkBehaviour {
             CmdFire();
         }
 
-        var x = Input.GetAxis("Horizontal") * Time.deltaTime * 150.0f;
+        var x = Input.GetAxis("Horizontal") * Time.deltaTime * 5.0f;
         var z = Input.GetAxis("Vertical") * Time.deltaTime * 3.0f;
 
         transform.Rotate(x, 0, 0);
