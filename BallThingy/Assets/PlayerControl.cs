@@ -7,11 +7,13 @@ public class PlayerControl : NetworkBehaviour {
 
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
-
+    private int shootvalue = 6;
+    private Rigidbody2D rb;
+    public int speed;
 	// Use this for initialization
 	void Start () {
 
-
+        rb = GetComponent<Rigidbody2D>();
 		
 	}
 
@@ -25,7 +27,7 @@ public class PlayerControl : NetworkBehaviour {
             bulletSpawn.rotation);
 
         // Add velocity to the bullet
-        bullet.GetComponent<Rigidbody2D>().velocity = new Vector2(6, 0);
+        bullet.GetComponent<Rigidbody2D>().velocity = new Vector2(shootvalue, 0);
         NetworkServer.Spawn(bullet);
         // Destroy the bullet after 2 seconds
         Destroy(bullet, 2.0f);
@@ -43,12 +45,24 @@ public class PlayerControl : NetworkBehaviour {
         {
             CmdFire();
         }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            shootvalue *= -1;
+            transform.rotation = new Quaternion(0, 180, 0, 0);
 
-        var x = Input.GetAxis("Horizontal") * Time.deltaTime * 5.0f;
-        var z = Input.GetAxis("Vertical") * Time.deltaTime * 3.0f;
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            shootvalue *= -1;
+            transform.rotation = new Quaternion(0, 0, 0, 0);
+        }
 
-        transform.Rotate(x, 0, 0);
-        transform.Translate(x, z, 0);
+        var x = Input.GetAxis("Horizontal");// * Time.deltaTime * 150.0f;
+        var y = Input.GetAxis("Vertical");//;
+
+        Vector2 movement = new Vector2(x, y);
+
+        rb.AddForce(movement * speed);
     }
 
     public override void OnStartLocalPlayer()
