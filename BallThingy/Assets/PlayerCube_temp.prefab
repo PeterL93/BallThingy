@@ -333,6 +333,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1230566498911944, guid: 043be4a34efbd440f81095bd0b3343ce,
     type: 2}
   bulletSpawn: {fileID: 4099483692497856}
+  shootvalue: 0
   speed: 8
 --- !u!114 &114289503798368160
 MonoBehaviour:
@@ -390,7 +391,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 1
-  m_SendInterval: 0.0625
+  m_SendInterval: 0.045454547
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
   m_SyncSpin: 0
