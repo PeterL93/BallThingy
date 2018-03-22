@@ -1,2 +1,0 @@
-# BallThingy
-Ball THINGY
