@@ -4,7 +4,8 @@ Ball THINGY
 ## Unity version
 >2017.3.1
 
-## Description
+## Info
+- Do not merge branches, without the consent of the branch owner
 ### Implemented features
 -
 -
