@@ -29,14 +29,15 @@ public class Shoot : NetworkBehaviour
         {
             return;
         }
-        //rotation        
         if (!Input.GetButton("Fire1") && force > 0)
         {
             if (force < 0.5)
             {
                 force = 1f;
             }
-            CmdFire();
+            Vector3 mousePos = Input.mousePosition;
+            Vector3 objectPos = Camera.main.WorldToScreenPoint(bulletSpawn.transform.position);
+            CmdFire(force, mousePos, objectPos);
             force = 0;
         }
         else if (Input.GetButton("Fire1"))
@@ -45,15 +46,20 @@ public class Shoot : NetworkBehaviour
         }
     }
     [Command]
-    private void CmdFire()
-    {
+    private void CmdFire(float force, Vector3 mousePos, Vector3 objectPos)
+    { 
+        if (force == 0)
+        {
+            Debug.Log("FUCK");
+            force = 1;
+        }
         GameObject bullet = pool.GetObject();
-        Vector3 mousePos = Input.mousePosition;
+ //       Vector3 mousePos = Input.mousePosition;
         
-        Vector3 objectPos = Camera.main.WorldToScreenPoint(bulletSpawn.transform.position);
+ //       Vector3 objectPos = Camera.main.WorldToScreenPoint(bulletSpawn.transform.position);
         mousePos.x = mousePos.x - objectPos.x;
         mousePos.y = mousePos.y - objectPos.y;
-
+        
         float relativeX = mousePos.x - bulletSpawn.position.x;
         float relativeY = mousePos.y - bulletSpawn.position.y;
 
@@ -83,26 +89,26 @@ public class Shoot : NetworkBehaviour
         {
             ySpeed = CalculateFastestSpeed(yRelativeX);
             xSpeed = force - ySpeed;
-//            Debug.Log("Equal or Y>2x xSpeed: " + xSpeed + " ySpeed: " + ySpeed);
+            Debug.Log("Equal or Y>2x xSpeed: " + xSpeed + " ySpeed: " + ySpeed);
         }
         else if (yRelativeX > 1)
         {
             xSpeed = CalculateFastestSpeed(1 / yRelativeX);
             ySpeed = force - xSpeed;
-//            Debug.Log("Y>1x && Y<2x xSpeed: " + xSpeed + " ySpeed: " + ySpeed);
+            Debug.Log("Y>1x && Y<2x xSpeed: " + xSpeed + " ySpeed: " + ySpeed);
         }
         else if (yRelativeX < 1)
         {
             if (yRelativeX <0.5) {
                 xSpeed = CalculateFastestSpeed(1 / yRelativeX);
                 ySpeed = force - xSpeed;
-//                Debug.Log("X>2y xSpeed: " + xSpeed + " ySpeed: " + ySpeed);
+                Debug.Log("X>2y xSpeed: " + xSpeed + " ySpeed: " + ySpeed);
             }
             else
             {
                 xSpeed = CalculateFastestSpeed(1 / yRelativeX);
                 ySpeed = force - xSpeed;
-//                Debug.Log("X<y2 && X>y1 xSpeed: " + xSpeed + " ySpeed: " + ySpeed);
+                Debug.Log("X<y2 && X>y1 xSpeed: " + xSpeed + " ySpeed: " + ySpeed);
             }
         }
         /*

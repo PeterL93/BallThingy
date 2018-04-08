@@ -426,4 +426,4 @@ MonoBehaviour:
   bulletSpawn: {fileID: 4763494960764408}
   pool: {fileID: 114730669702172140}
   speed: 20
-  travelX: 0
+  travelX: 10
