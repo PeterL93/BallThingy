@@ -133,7 +133,14 @@ public class Shoot : NetworkBehaviour
     IEnumerator LateCall(float sec, GameObject bullet)
     {
         yield return new WaitForSeconds(sec);
-        bullet.SetActive(false);
+        //bullet.SetActive(false);
+        RpcsetDeactive(bullet);
+    }
+
+    [ClientRpc]
+    private void RpcsetDeactive(GameObject go)
+    {
+        go.SetActive(false);
     }
 
 }
