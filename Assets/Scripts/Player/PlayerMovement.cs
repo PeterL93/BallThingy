@@ -5,6 +5,8 @@ using UnityEngine.Networking;
 
 public class PlayerMovement : NetworkBehaviour
 {
+
+    public GameObject bazooka;
     public float speed = 1f;
     public float jumpSpeed = 3f;
     public bool groundCheck;
@@ -18,9 +20,7 @@ public class PlayerMovement : NetworkBehaviour
 
     public Vector2 ropeHook;
     public float swingForce = 4f;
-
-
-    [Command]
+    
 
     void Start()
     {
@@ -32,19 +32,32 @@ public class PlayerMovement : NetworkBehaviour
     
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            
+            bazooka.SetActive(true);
+        }
+
         if (!isLocalPlayer)
         {
             return;
         }
+
+            jumpInput = Input.GetAxis("Jump");
+            horizontalInput = Input.GetAxis("Horizontal");
+
+            groundCheck = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y  - 0.04f), Vector2.down, 0.025f);
         
-        jumpInput = Input.GetAxis("Jump");
-        horizontalInput = Input.GetAxis("Horizontal");
-        var halfHeight = transform.GetComponent<SpriteRenderer>().bounds.extents.y;
-        groundCheck = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - halfHeight - 0.04f), Vector2.down, 0.025f);
     }
 
     void FixedUpdate()
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
         if (horizontalInput < 0f || horizontalInput > 0f)
         {
           
@@ -53,10 +66,10 @@ public class PlayerMovement : NetworkBehaviour
             {
 
 
-                // 1 - Get a normalized direction vector from the player to the hook point
+            
                 var playerToHookDirection = (ropeHook - (Vector2)transform.position).normalized;
 
-                // 2 - Inverse the direction to get a perpendicular direction
+            
                 Vector2 perpendicularDirection;
                 if (horizontalInput < 0)
                 {
