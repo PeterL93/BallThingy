@@ -48,11 +48,6 @@ public class Shoot : NetworkBehaviour
     [Command]
     private void CmdFire(float force, Vector3 mousePos, Vector3 objectPos)
     { 
-        if (force == 0)
-        {
-            Debug.Log("FUCK");
-            force = 1;
-        }
         GameObject bullet = pool.GetObject();
  //       Vector3 mousePos = Input.mousePosition;
         
@@ -62,7 +57,7 @@ public class Shoot : NetworkBehaviour
         
         float relativeX = mousePos.x - bulletSpawn.position.x;
         float relativeY = mousePos.y - bulletSpawn.position.y;
-
+        
         bullet.transform.position = bulletSpawn.position;
         bullet.transform.rotation = bulletSpawn.rotation;
         bullet.SetActive(true);
@@ -85,30 +80,27 @@ public class Shoot : NetworkBehaviour
         }
 
         float yRelativeX = relativeY / relativeX;
+ 
         if (yRelativeX == 1 || yRelativeX>2)
         {
-            ySpeed = CalculateFastestSpeed(yRelativeX);
+            ySpeed = CalculateFastestSpeed(force, yRelativeX);
             xSpeed = force - ySpeed;
-            Debug.Log("Equal or Y>2x xSpeed: " + xSpeed + " ySpeed: " + ySpeed);
         }
         else if (yRelativeX > 1)
         {
-            xSpeed = CalculateFastestSpeed(1 / yRelativeX);
+            xSpeed = CalculateFastestSpeed(force, 1 / yRelativeX);
             ySpeed = force - xSpeed;
-            Debug.Log("Y>1x && Y<2x xSpeed: " + xSpeed + " ySpeed: " + ySpeed);
         }
         else if (yRelativeX < 1)
         {
             if (yRelativeX <0.5) {
-                xSpeed = CalculateFastestSpeed(1 / yRelativeX);
+                xSpeed = CalculateFastestSpeed(force, 1 / yRelativeX);
                 ySpeed = force - xSpeed;
-                Debug.Log("X>2y xSpeed: " + xSpeed + " ySpeed: " + ySpeed);
             }
             else
             {
-                xSpeed = CalculateFastestSpeed(1 / yRelativeX);
+                xSpeed = CalculateFastestSpeed(force, 1 / yRelativeX);
                 ySpeed = force - xSpeed;
-                Debug.Log("X<y2 && X>y1 xSpeed: " + xSpeed + " ySpeed: " + ySpeed);
             }
         }
         /*
@@ -133,7 +125,7 @@ public class Shoot : NetworkBehaviour
         float traveldistance = travelX / force;
         StartCoroutine(LateCall(traveldistance, bullet));
     }
-    private float CalculateFastestSpeed(float highestNumber)
+    private float CalculateFastestSpeed(float force, float highestNumber)
     {
         return force - (force / (highestNumber + 1));
     }
